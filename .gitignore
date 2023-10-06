@@ -2,6 +2,7 @@
 
 # dependencies (/node_modules already here from assignment)
 /node_modules
+/react-frontend/node_modules
 /.pnp
 .pnp.js
 
