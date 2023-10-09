@@ -99,7 +99,7 @@ app.get('/users', (req, res) => {
    }
 });
 
-app.get('/users/:name+:job', (req, res) => { // this is not working...
+app.get('/users/:name+:job', (req, res) => { // this is not working... 
    const name = req.query.name;
    const job = req.query.job
    if (name != undefined , job != undefined){
