@@ -12,8 +12,12 @@ function MyApp() {
   setCharacters(updated);
   }
 
-  function updateList(person) {
-    setCharacters([...characters, person]);
+  function updateList(person) { 
+    postUser(person)
+      .then(() => setCharacters([...characters, person]))
+      .catch((error) => {
+        console.log(error);
+      })
   }
 
   function fetchUsers() {
@@ -22,7 +26,7 @@ function MyApp() {
   }
 
   function postUser(person) {
-    const promise = fetch("Http://localhost:8000/users", {
+    const promise = fetch("http://localhost:8000/users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -31,14 +35,6 @@ function MyApp() {
     });
 
     return promise;
-  }
-
-  function updateList(person) { 
-    postUser(person)
-      .then(() => setCharacters([...characters, person]))
-      .catch((error) => {
-        console.log(error);
-      })
   }
 
   useEffect(() => {
