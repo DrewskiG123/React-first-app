@@ -1,4 +1,4 @@
-import express from "express";
+import express, { json } from "express";
 import cors from "cors";
 
 const app = express();
@@ -40,7 +40,7 @@ app.listen(port, () => {
    console.log(`Example app listening at http://localhost:${port}`);
 });
 
-app.get('/', (req, res) => {
+app.get('/', (req, res) => { // default location displaying "Hello, World!"
    res.send('Hello World!');
 });
 
@@ -57,15 +57,14 @@ app.get('/users', (req, res) => {
        res.send(result);
    }
    else{
-       res.send(users);
+       res.status(404).send(users);
    }
 });
 
-const findUserById = (id) => {
+const findUserById = (id) =>
     users['users_list']
         .find( (user) => user['id'] === id);
-}
-
+    
 app.get('/users/:id', (req, res) => {
     const id = req.params['id']; //or req.params.id
     let result = findUserById(id);
@@ -76,6 +75,17 @@ app.get('/users/:id', (req, res) => {
     }
 });
 
+app.delete('/users/:id', (req, res) => { // working
+   const id = req.params['id'];
+   let result = findUserById(id);
+   if (result === undefined) {
+       res.status(404).send('Resource not found. Unable to delete.');
+   } else { // if the id is found, remove it from the list
+       users['users_list'].splice( (users['users_list'].indexOf(result)), 1);
+       res.status(200).send('Successful deletion.');
+   }
+});
+
 const addUser = (user) => {
    users['users_list'].push(user);
    return user;
@@ -83,34 +93,29 @@ const addUser = (user) => {
 
 app.post('/users', (req, res) => {
    const userToAdd = req.body;
-   addUser(userToAdd);
-   res.send();
-});
-
-app.delete('/users:id', (req, res) => { // this is not working...
-   const id = req.params['id'];
-   let result = findUserById(id);
-   if (result === undefined) {
-       res.status(404).send('Resource not found.');
-   } else {
-      users['users_list'].pop(result);
+   if(userToAdd.id === undefined){
+       userToAdd.id = String(Math.floor(Math.random() * 1000)); // working, adds a simple unique id
    }
+   addUser(userToAdd);
+   res.status(201).send(userToAdd); // working, sends json and code
 });
 
+// WIP -------------------------------------------------------------------------
 const findUserByNameAndJob = (name, job) => { // don't know if this is correct
    return users['users_list']
-       .filter( (user) => user['name'] === name , (user) => user['job'] === job);
+       .filter( (user) => user['name'] === name && user['job'] === job);
 }
 
-app.get('/users/:name+:job', (req, res) => { // this is not working... 
+app.get('/users', (req, res) => { // this is not working... 
    const name = req.query.name;
    const job = req.query.job
-   if (name != undefined , job != undefined){
+   if (name != undefined && job != undefined){
        let result = findUserByNameAndJob(name, job);
        result = {users_list: result};
        res.send(result);
    }
    else{
-       res.send(users);
+       res.status(404).send(users);
    }
 });
+// -----------------------------------------------------------------------------

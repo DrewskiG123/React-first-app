@@ -24,4 +24,4 @@ yarn-debug.log*
 yarn-error.log*
 packages/react-frontend/node_modules/.cache/.eslintcache
 packages/react-frontend/node_modules/.cache/default-development/0.pack
-.gitignore
+packages/react-frontend/node_modules/.cache/default-development/index.pack
