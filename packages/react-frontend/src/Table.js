@@ -2,7 +2,7 @@ function TableHeader() {
   return (
     <thead>
       <tr>
-        <th>Id</th>
+        <th>ID</th>
         <th>Name</th>
         <th>Job</th>
         <th>Remove entry</th>
