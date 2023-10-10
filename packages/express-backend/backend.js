@@ -93,7 +93,7 @@ const addUser = (user) => {
 
 app.post('/users', (req, res) => {
    const userToAdd = req.body;
-   if(userToAdd.id === undefined){
+   if(userToAdd.id === undefined || userToAdd.id === ""){
        userToAdd.id = String(Math.floor(Math.random() * 1000)); // working, adds a simple unique id
    }
    addUser(userToAdd);
