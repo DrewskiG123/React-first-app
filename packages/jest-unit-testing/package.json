@@ -1,0 +1,11 @@
+{
+  "name": "jest-unit-testing",
+  "version": "1.0.0",
+  "description": "unit tests",
+  "main": "module.js",
+  "scripts": {
+    "test": "npx jest"
+  },
+  "author": "Andrew Ji",
+  "license": "ISC"
+}
