@@ -44,22 +44,53 @@ app.get('/', (req, res) => { // default location displaying "Hello, World!"
    res.send('Hello World!');
 });
 
-const findUserByName = (name) => { 
-   return users['users_list']
-       .filter( (user) => user['name'] === name); 
+// const findUserByName = (name) => { 
+//    return users['users_list']
+//        .filter( (user) => user['name'] === name); 
+// }
+
+// app.get('/users', (req, res) => {
+//    const name = req.query.name;
+//    if (name != undefined){
+//        let result = findUserByName(name);
+//        result = {users_list: result};
+//        res.send(result);
+//    }
+//    else{
+//        res.status(404).send(users);
+//    }
+// });
+
+// WIP -------------------------------------------------------------------------
+const findUserByNameAndJob = (name, job) => { // can also maybe combine this with find by name and just have separate cases INSIDE of here
+   if(job === undefined){
+      return users['users_list']
+         .filter( (user) => user['name'] === name);
+   }
+   else if(name === undefined){
+      return users['users_list']
+         .filter( (user) => user['job'] === job);
+   }
+   else{
+      return users['users_list']
+       .filter( (user) => user['name'] === name || user['job'] === job);
+   }
 }
 
-app.get('/users', (req, res) => {
+app.get('/users', (req, res) => { // need to combine the two of these and integrate functionality
+   // main issue is that I don't know the formatting of the URL, for name alone it was users?name={name}
    const name = req.query.name;
-   if (name != undefined){
-       let result = findUserByName(name);
+   const job = req.query.job
+   if (name != undefined || job != undefined){
+       let result = findUserByNameAndJob(name, job);
        result = {users_list: result};
        res.send(result);
    }
-   else{
+   else if (name === undefined && job === undefined){
        res.status(404).send(users);
    }
 });
+// -----------------------------------------------------------------------------
 
 const findUserById = (id) =>
     users['users_list']
@@ -99,23 +130,3 @@ app.post('/users', (req, res) => {
    addUser(userToAdd);
    res.status(201).send(userToAdd); // working, sends json and code
 });
-
-// WIP -------------------------------------------------------------------------
-const findUserByNameAndJob = (name, job) => { // don't know if this is correct
-   return users['users_list']
-       .filter( (user) => user['name'] === name && user['job'] === job);
-}
-
-app.get('/users', (req, res) => { // this is not working... 
-   const name = req.query.name;
-   const job = req.query.job
-   if (name != undefined && job != undefined){
-       let result = findUserByNameAndJob(name, job);
-       result = {users_list: result};
-       res.send(result);
-   }
-   else{
-       res.status(404).send(users);
-   }
-});
-// -----------------------------------------------------------------------------

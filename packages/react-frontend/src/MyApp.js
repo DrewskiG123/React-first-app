@@ -3,18 +3,38 @@ import Table from './Table';
 import Form from './Form';
 
 function MyApp() {
-  const [characters, setCharacters] = useState([]);
-
+  const [characters, setCharacters] = useState([]); // grabbing the list of characters?
   function removeOneCharacter (index) {
-    const updated = characters.filter((character, i) => {
-      return i !== index
-    });
-  setCharacters(updated);
+    var id = "";
+    const updated = characters.filter((character, i) => {// vvv this is actually a very small function
+      if(i == index){ // I added this so I could implement a linked delete
+        id = character.id} 
+      return i !== index}); 
+    // using the simple function above, it returns a list of characters that have an index 
+    // that DOES NOT match the one provided, which is the one to delete
+
+    deleteUser(id)
+      .then((res) => {
+        if (res.status === 200) {
+          setCharacters(updated) // updates the table with the new list of characters
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   }
 
   function updateList(person) { 
     postUser(person)
-      .then(() => setCharacters([...characters, person]))
+      .then((res) => {
+        if (res.status === 201){
+          return res.json()}
+      })
+      .then((person) => {
+        if (person) {
+          setCharacters([...characters, person])
+        }
+      })
       .catch((error) => {
         console.log(error);
       })
@@ -32,6 +52,14 @@ function MyApp() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(person),
+    });
+
+    return promise;
+  }
+
+  function deleteUser(id) { // need to implement this
+    const promise = fetch(`http://localhost:8000/users/${id}`, {
+      method: "DELETE",
     });
 
     return promise;
