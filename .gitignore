@@ -27,3 +27,4 @@ packages/react-frontend/node_modules/.cache/.eslintcache
 packages/react-frontend/node_modules/.cache/default-development/0.pack
 packages/react-frontend/node_modules/.cache/default-development/index.pack
 packages/jest-unit-testing
+packages/jest-unit-testing/package.json
