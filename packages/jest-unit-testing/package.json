@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "unit tests",
   "main": "module.js",
+  "type": "module",
   "scripts": {
-    "test": "npx jest"
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"
+	},
+  "jest": {
+    "transform": {}
   },
   "author": "Andrew Ji",
   "license": "ISC"
